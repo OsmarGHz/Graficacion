@@ -22,8 +22,8 @@ void graficarParametrica(){ //Grafica pero con ecuaciones parametricas
 	float j,k;
 	float t;
 	
-	t=0;
-	j = 3, k = 3;
+	t = 0;
+	j = 3, k = 4;
 	a = 1, b = 2, c = 1, d = 2;
 	
 	xAnterior = cos(a*t) - pow(cos(b*t),j);
@@ -32,17 +32,20 @@ void graficarParametrica(){ //Grafica pero con ecuaciones parametricas
 	ypAnterior = ypc - yAnterior*deltaY;
 	
 	while(t < 360*nv){
+		
+		t += 0.002;
+		
 		x = cos(a*t) - pow(cos(b*t),j);
 		y = sin(c*t) - pow(sin(d*t),k);
 		xp = xpc + x*deltaX;
 		yp = ypc - y*deltaY;
+		
 		if(y >= ymin && yAnterior >= ymin && y <= ymax && yAnterior <= ymax) line(xpAnterior,ypAnterior,xp,yp);
+		
 		xAnterior = x;
 		yAnterior = y;
 		xpAnterior = xp;
 		ypAnterior = yp;
-		
-		t += 0.002;
 	}
 }
 
@@ -51,21 +54,26 @@ void graficarPolar(){ //Grafica con coordenadas polares (al incremento se le inc
 	incremento = 0;
 	
 	theta = (incremento*acos(-1))/180;
-	r = polar(theta);
+	r = polar(theta); //Para poder usar esto, NECESITAS despejar r de la ecuacion polar
+	
 	xAnterior = r*cos(theta);
 	yAnterior = r*sin(theta);
 	xpAnterior = xpc + xAnterior*deltaX;
 	ypAnterior = ypc - yAnterior*deltaY;
 	
 	while(incremento < 360*nv){
+		
 		incremento += 0.01;
 		theta = (incremento*acos(-1))/180;
 		r = polar(theta);
+		
 		x = r*cos(theta);
 		y = r*sin(theta);
 		xp = xpc + x*deltaX;
 		yp = ypc - y*deltaY;
+		
 		if(yAnterior >= ymin && y >= ymin && yAnterior <= ymax && y <= ymax) line(xpAnterior,ypAnterior,xp,yp);
+		
 		xAnterior = x;
 		yAnterior = y;
 		xpAnterior = xp;
@@ -74,23 +82,24 @@ void graficarPolar(){ //Grafica con coordenadas polares (al incremento se le inc
 	
 }
 
-void graficarFuncion(){ //Grafica meramente con la funcion. (El incremento sirve para imcrementar)
-	
-	incremento = 0.001;
+void graficarFuncion(){ //Grafica meramente con la funcion.
 	
 	xAnterior = xmin;
 	yAnterior = funcion(xAnterior);
 	xpAnterior = xpc + xAnterior*deltaX;
 	ypAnterior = ypc - yAnterior*deltaY;
 	
-	x = xAnterior;
+	x = xAnterior; //ESTO ES IMPORTANTISIMO; AGREGALO O PUEDEN HABER ERRORES. X NO SE CALCULA SOLITO DESDE CERO en funciones normales
 	
 	while(x<=xmax){
-		x += incremento;
+		
+		x += 0.001; //Aqui, la x se aumenta con la cantidad de incremento
 		y = funcion(x);
 		xp = xpc + x*deltaX;
 		yp = ypc - y*deltaY;
+		
 		if(yAnterior >= ymin && y >= ymin && yAnterior <= ymax && y <= ymax) line(xpAnterior,ypAnterior,xp,yp);
+		
 		xAnterior = x;
 		yAnterior = y;
 		xpAnterior = xp;
@@ -117,11 +126,18 @@ int main(){
 	
 	line(xpc,0,xpc,ypmax);
 	line(0,ypc,xpmax,ypc);
-	
 	graficarFuncion();
 	getch();
+	cleardevice();
+	
+	line(xpc,0,xpc,ypmax);
+	line(0,ypc,xpmax,ypc);
 	graficarPolar();
 	getch();
+	cleardevice();
+	
+	line(xpc,0,xpc,ypmax);
+	line(0,ypc,xpmax,ypc);
 	graficarParametrica();
 	getch();
 	
