@@ -26,17 +26,14 @@ void dibuja_poligono(poligono figura, int xpc, int ypc, float deltaX, float delt
 	}
 }
 
-void dPCPerCaballera(poligono figura, int xpc, int ypc, float deltaX, float deltaY){
-	int i, n;
-	int xpant, ypant, xp, yp;
-	
-	n = figura.n;
-	for (i=0; i<n; i++){
-		xpant = xpc + figura.x[ i%n ] * deltaX;
-		ypant = ypc - figura.y[ i%n ] * (deltaY*0.5);
-		xp = xpc + figura.x[ (i+1)%n ] * deltaX;
-		yp = ypc - figura.y[ (i+1)%n ] * (deltaY*0.5);
-		line(xpant, ypant, xp, yp);
+void dLineBetPoli(poligono figura1, poligono figura2, int n, int xpc, int ypc, float deltaX, float deltaY){
+	int xpf1, ypf1, xpf2, ypf2;
+	for(int i=0;i<n;i++){
+		xpf1 = xpc + figura1.x[ (i+1)%n ] * deltaX;
+		ypf1 = ypc - figura1.y[ (i+1)%n ] * deltaY;
+		xpf2 = xpc + figura2.x[ (i+1)%n ] * deltaX;
+		ypf2 = ypc - figura2.y[ (i+1)%n ] * deltaY;
+		line(xpf1,ypf1, xpf2,ypf2);
 	}
 }
 
@@ -77,7 +74,7 @@ int main(){
 	
 	// Determina los vertices del poligono
 	incremento = 0;
-	r = 2; // radio
+	r = 3; // radio
 	
 	//Calculo poligono normal
 	for (i=0; i<n; i++){
@@ -107,6 +104,8 @@ int main(){
 	}
 	// Dibuja el poligono
 	dibuja_poligono(figuraTrasladada, xpc, ypc, deltaX, deltaY);
+	
+	dLineBetPoli(figura,figuraTrasladada,n,xpc,ypc,deltaX,deltaY);
 	
 	getch();
 	closegraph();
